@@ -233,7 +233,7 @@ export default function Na() {
                 <Link to="/">
                   <img
                     className="h-[8rem] w-auto cursor-pointer"
-                    src="https://o.remove.bg/downloads/bc1bbec8-cc05-4cb2-9f95-8cefd7f6c53b/7515317-removebg-preview.png"
+                    src="clothing.png"
                     alt=""
                   />
                 </Link>
@@ -375,57 +375,15 @@ export default function Na() {
                   <Menu
                     anchorEl={anchorEl}
                     id="account-menu"
-                    open={open}
+                    open={openPopup}
                     onClose={handleClose}
                     onClick={handleClose}
-                    PaperProps={{
-                      elevation: 0,
-                      sx: {
-                        overflow: "visible",
-                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                        mt: 1.5,
-                        "& .MuiAvatar-root": {
-                          width: 32,
-                          height: 32,
-                          ml: -0.5,
-                          mr: 1,
-                        },
-                        "&:before": {
-                          content: '""',
-                          display: "block",
-                          position: "absolute",
-                          top: 0,
-                          right: 14,
-                          width: 10,
-                          height: 10,
-                          bgcolor: "background.paper",
-                          transform: "translateY(-50%) rotate(45deg)",
-                          zIndex: 0,
-                        },
-                      },
-                    }}
-                    transformOrigin={{ horizontal: "right", vertical: "top" }}
-                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                   >
-                    <MenuItem onClick={handleClose}>
-                      <Avatar /> Profile
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={() => navigate("/account/order")}>
+                      My Orders
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <Avatar /> My account
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={handleClose}>
-                      
-                      Add another account
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                     
-                      Settings
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      
-                      Logout
-                    </MenuItem>
+                    <MenuItem onClick={handleClose}>Logout</MenuItem>
                   </Menu>
                 </div>
 

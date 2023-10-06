@@ -87,12 +87,12 @@ const Footer = () => {
           </Typography>
           <Typography varient="body2" componant="p">
             Icons Made by:{" "}
-            <Link Href="#" color="inherit" underline="always">
+            <Link href="/" color="inherit" underline="always">
               {" "}
               Freepeak{" "}
             </Link>
             From
-            <Link Href="#" color="inherit" underline="always">
+            <Link href="/" color="inherit" underline="always">
               {" "}
               www.sdk.com{" "}
             </Link>

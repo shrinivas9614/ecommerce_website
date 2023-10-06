@@ -1,26 +1,35 @@
 import { Box, Button, Grid, TextField, TextareaAutosize } from "@mui/material";
 import React from "react";
 import AddressCard from "../AddressCard/AddressCard";
+import { useDispatch } from "react-redux";
+import { createOrder } from "../../../store/order/ActionType";
+import { useNavigate } from "react-router-dom";
 
 const DeliveryAddressForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const address = {
       firstName: data.get("firstName"),
       lastName: data.get("lastName"),
-      address: data.get("address"),
+      streetAddress: data.get("streetAddress"),
       city: data.get("city"),
-      State: data.get("state"),
-      postalCode: data.get("postalCode"),
-      phoneNumber: data.get("phoneNumber"),
-    }
-    console.log("address", address);
+      state: data.get("state"),
+      zipCode: data.get("zipCode"),
+      mobile: data.get("mobile"),
+    };
+    const orderData = { address, navigate };
+    dispatch(createOrder(orderData));
+    console.log("order address is", orderData);
   };
   return (
     <div>
       <Grid container spacing={4}>
         <Grid
+          item
           xs={12}
           lg={5}
           className="border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll"
@@ -47,8 +56,6 @@ const DeliveryAddressForm = () => {
                     required
                     id="firstName"
                     name="firstName"
-                    autoComp1ete=" given-name "
-                    Name="firstName"
                   />
                 </Grid>
 
@@ -59,8 +66,6 @@ const DeliveryAddressForm = () => {
                     required
                     id="lastName"
                     name="lastName"
-                    autoComp1ete=" given-name "
-                    Name="lastName"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -68,45 +73,37 @@ const DeliveryAddressForm = () => {
                     label="address"
                     fullWidth
                     required
-                    id="address"
-                    name="address"
-                    autoComp1ete=" given-address "
-                    Name="address"
+                    id="streetAddress"
+                    name="streetAddress"
                     multiline
                     rows={4}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    label="City"
+                    label="city"
                     fullWidth
                     required
                     id="city"
                     name="city"
-                    autoComp1ete=" given-City "
-                    Name="City"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    label="State/Proviance/Region"
+                    label="state/Proviance/Region"
                     fullWidth
                     required
                     id="state"
                     name="state"
-                    autoComp1ete=" given-state "
-                    Name="state"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    label="postalCode"
+                    label="Zip Code"
                     fullWidth
                     required
-                    id="postalCode"
-                    name="postalCode"
-                    autoComp1ete=" given-postalCode "
-                    Name="PostalCode"
+                    id="zipCode"
+                    name="zipCode"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -114,15 +111,13 @@ const DeliveryAddressForm = () => {
                     label="Phone Number"
                     fullWidth
                     required
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    autoComp1ete=" given-phoneNumber "
-                    Name="phoneNumber"
+                    id="mobile"
+                    name="mobile"
                   />
                 </Grid>
                 <Grid item xs={12} className="flex justify-start">
-                  <Button
-                  type="submit"
+                  <button
+                    type="submit"
                     sx={{
                       mt: 2,
                       width: "9rem",
@@ -132,7 +127,7 @@ const DeliveryAddressForm = () => {
                     varient="contained"
                   >
                     Next
-                  </Button>
+                  </button>
                 </Grid>
               </Grid>
             </form>

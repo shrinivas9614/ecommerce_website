@@ -13,7 +13,7 @@ const OrderTracker = ({ activeStep }) => {
     <div className="w-full">
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
-          <Step>
+          <Step key="item">
             <StepLabel sx={{ bgcolor: "#915SFD", fontSize: "44px" }}>
               {label}
             </StepLabel>

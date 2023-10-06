@@ -12,7 +12,7 @@
   }
   ```
 */
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -21,27 +21,69 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { navigationData } from "./navigationData";
-import { Avatar, Divider, IconButton, Menu, MenuItem } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Avatar,
+  Button,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import AuthModal from "../../Auth/AuthModal";
+import { useDispatch, useSelector } from "react-redux";
+import { get_user, logout } from "../../../store/Auth/Action";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Na() {
+  const [openAuthModel, setOpenAuthModel] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const openPopup = Boolean(anchorEl);
+  const jwt = localStorage.getItem("jwt");
+  const { auth } = useSelector((store) => store);
+  const dispatch = useDispatch();
+  const location = useLocation();
+  useEffect(() => {
+    if (jwt) {
+      dispatch(get_user(jwt));
+    }
+  }, [jwt, auth.jwt]);
+
+  useEffect(() => {
+    if (auth.user) {
+      handleClose();
+    }
+    if (location.pathname === "/register" || location.pathname === "/login") {
+      navigate(-1);
+    }
+  }, [jwt, auth.jwt]);
+  const handleLogout = () => {
+    dispatch(logout());
+    handleCloseMenu();
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
+    navigate("/");
   };
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleCatagoryClick = (category, section, item, close) => {
     navigate(`/${category.id}/${section.id}/${item.name}`);
+  };
+  const handleClose = () => {
+    setOpenAuthModel(false);
+    navigate("/");
+  };
+
+  const handleOpen = () => {
+    setOpenAuthModel(true);
   };
 
   return (
@@ -362,29 +404,38 @@ export default function Na() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <IconButton
-                    onClick={handleClick}
-                    size="small"
-                    sx={{ ml: 2 }}
-                    aria-controls={openPopup ? "account-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openPopup ? "true" : undefined}
-                  >
-                    <Avatar sx={{ bgcolor: "deepOrange[500]" }}>N</Avatar>
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    id="account-menu"
-                    open={openPopup}
-                    onClose={handleClose}
-                    onClick={handleClose}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={() => navigate("/account/order")}>
-                      My Orders
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
-                  </Menu>
+                  {auth.user?.firstName ? (
+                    <>
+                      <IconButton
+                        onClick={handleClick}
+                        size="small"
+                        sx={{ ml: 2 }}
+                        aria-controls={openPopup ? "account-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openPopup ? "true" : undefined}
+                      >
+                        <Avatar sx={{ bgcolor: "Orange" }}>
+                          <p>{auth.user?.firstName[0].toUpperCase()} </p>
+                          <p>{auth.user?.lastName[0].toUpperCase()} </p>
+                        </Avatar>
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        id="account-menu"
+                        open={openPopup}
+                        onClose={handleCloseMenu}
+                        onClick={handleCloseMenu}
+                      >
+                        <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
+                        <MenuItem onClick={() => navigate("/account/order")}>
+                          My Orders
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>Log out</MenuItem>
+                      </Menu>
+                    </>
+                  ) : (
+                    <Button onClick={handleOpen}> Signin </Button>
+                  )}
                 </div>
 
                 <div className="hidden lg:ml-8 lg:flex"></div>
@@ -420,6 +471,7 @@ export default function Na() {
           </div>
         </nav>
       </header>
+      <AuthModal handleClose={handleClose} openMenu={openAuthModel} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -10,16 +10,18 @@ import {
 } from "@heroicons/react/20/solid";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ProductCard from "./ProductCard";
-import { mens_kurta } from "../../../Data/Men/men_kurta";
 import { filters, singleFilter, sortOptions } from "./ProductData";
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  Pagination,
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { findProduct } from "../../../store/Product/Action";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -28,6 +30,55 @@ export default function Products({ data }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const params = useParams();
+
+  const decodecdedQueryString = decodeURIComponent(location.search);
+  const searchParams = new URLSearchParams(decodecdedQueryString);
+
+  const sizeValue = searchParams.get("size");
+  const colorValue = searchParams.get("color");
+  const priceValue = searchParams.get("price");
+  const sortValue = searchParams.get("sort");
+  const discount = searchParams.get("discount");
+  const pageNumber = searchParams.get("page") || 1;
+  const stock = searchParams.get("stock");
+  const dispatch = useDispatch();
+  const { products } = useSelector((store) => store);
+
+  useEffect(() => {
+    const [minPrice, maxPrice] =
+      priceValue === null ? [0, 10000] : priceValue.split("-").map(Number);
+    const data = {
+      category: params.lavelThree,
+      colors: colorValue || [],
+      sizes: sizeValue || [],
+      minDiscount: discount || 0,
+      minPrice,
+      maxPrice,
+      stock: stock,
+      sort: sortValue || "price_low",
+      pageNumber: pageNumber || 1,
+      pageSize: 1,
+    };
+    dispatch(findProduct(data));
+  }, [
+    params.lavelThree,
+    sizeValue,
+    colorValue,
+    priceValue,
+    discount,
+    sortValue,
+    pageNumber,
+    stock,
+  ]);
+
+  const handlePaginationChange = (event,value) => {
+    const searchParams = new URLSearchParams(location.search)
+    searchParams.set("page", value)
+    const query = searchParams.toString()
+    navigate({search: `?${query}`})
+  }
+
   const handleFilters = (value, sectionId) => {
     const searchParamms = new URLSearchParams(location.search);
 
@@ -293,7 +344,7 @@ export default function Products({ data }) {
                                 >
                                   {section.options.map((option, optionIdx) => (
                                     <div
-                                      key={option.value}
+                                      key={option.optionIdx}
                                       className="flex items-center"
                                     >
                                       <FormControlLabel
@@ -383,11 +434,18 @@ export default function Products({ data }) {
               {/* Product grid */}
               <div className="lg:col-span-3 w-full ">
                 <div className="flex flex-wrap justify-center bg-white py-5 ">
-                  {mens_kurta.map((item) => (
-                    <ProductCard product={item} />
-                  ))}
+                  {products.products &&
+                    products.products?.content?.map((item) => (
+                      <ProductCard key={item.id} product={item} />
+                    ))}
                 </div>
               </div>
+            </div>
+          </section>
+          <section className="w-full">
+            <div className="px-4 py-5 flex justify-center">
+            <Pagination count={products.products?.totalPages} onChange={handlePaginationChange} variant="outlined" color="primary" />
+
             </div>
           </section>
         </main>

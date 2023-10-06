@@ -88,9 +88,9 @@ export const navigationData = {
           id: "clothing",
           name: "Clothing",
           items: [
-            { name: "Tops" },
-            { name: "Pants" },
-            { name: "Sweaters" },
+            { name: "mens_kurta" },
+            { name: "Shirts" },
+            { name: "pents" },
             { name: "T-Shirts" },
             { name: "Jackets" },
             { name: "Activewear" },

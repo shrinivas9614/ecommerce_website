@@ -26,7 +26,7 @@ export const singleFilter = [
       { value: "999-1999", label: "999-1999", checked: false },
       { value: "1999-2999", label: "1999-2999", checked: false },
       { value: "3999-4999", label: "3999-4999", checked: false },
-      { value: "upto-4999", label: "upto 4999", checked: false },
+
       // Add more price range options as needed
     ],
   },
@@ -51,16 +51,16 @@ export const filters = [
       { value: "brown", label: "Brown", checked: false },
       { value: "green", label: "Green", checked: false },
       { value: "purple", label: "Purple", checked: false },
+      { value: "yellow", label: "yellow", checked: false },
     ],
   },
   {
     id: "sizes",
     name: "sizes",
-    options:[
+    options: [
       { value: "S", label: "S", checked: false },
       { value: "M", label: "M", checked: false },
       { value: "L", label: "L", checked: false },
-    ]
-
-  }
+    ],
+  },
 ];

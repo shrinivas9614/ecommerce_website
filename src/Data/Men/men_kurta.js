@@ -1110,7 +1110,7 @@ export const mens_kurta=[
             },
             {
               "name": "L",
-              "quantity": 50
+              "quantity": 5099999999999999999
             }
           ],
           "quantity": 100,

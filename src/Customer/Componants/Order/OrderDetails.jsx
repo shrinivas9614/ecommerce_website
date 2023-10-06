@@ -16,7 +16,8 @@ const OrderDetails = () => {
       </div>
       <Grid className="space-x-5 " container>
         {[1, 1, 1, 1, 1].map(() => (
-          <>
+
+          <div key="item">
             <Grid
               item
               container
@@ -51,7 +52,7 @@ const OrderDetails = () => {
                 </Box>
               </Grid>
             </Grid>
-          </>
+          </div>
         ))}
       </Grid>
     </div>

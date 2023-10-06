@@ -19,16 +19,17 @@ const CustomerRoutes = () => {
       <>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<HomePage />} />
+          <Route path="/register" element={<HomePage />} />
           <Route path="/cart" element={<Cart />} />
           <Route
             path="/:lavelOne/:lavelTwo/:lavelThree"
             element={<Products />}
           />
           <Route path="/product/:productId" element={<ProductsDitails />} />
-          <Route path="/product/:productId" element={<ProductsDitails />} />
           <Route path="/checkout" element={<CheckOut />} />
           <Route path="/account/order" element={<Order />} />
-          <Route path="/account/order/:orderId" element={<OrderDetails />} />
+          <Route path="/account/order/:orderID" element={<OrderDetails />} />
         </Routes>
       </>
       <div>

@@ -28,7 +28,7 @@ const HomeSectionCarosial = ({data,sectionName}) => {
     .map((item, i) => <HomeSectionCard product={item} />);
 
   return (
-    <div className="relative sm:px-4 lg:px-8">
+    <div key="item" className="relative sm:px-4 lg:px-8">
         <h2 className="text-2x1 font-extrabold text-gray-800 py-5"> {sectionName } </h2>
       <div className="relative p-5"></div>
       <AliceCarousel
